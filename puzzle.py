@@ -67,8 +67,7 @@ knowledge2 = And(
     Implication (AKnave,Not(Or(And(AKnight,BKnight),And(AKnave,BKnave)))),   # If A is knave, both are different
 
     Implication(BKnight,Or(And(AKnight,BKnave),And(AKnave,BKnight))),       # If B is a knight, both are different
-    Implication (AKnave,Not(Or(And(AKnight,BKnave),And(AKnave,BKnight))))   # If B is a knave, both are the same (negation)
-
+    Implication (BKnave,Not(Or(And(AKnight,BKnave),And(AKnave,BKnight))))   # If B is a knave, both are the same (negation)
 
 )
 
@@ -78,7 +77,31 @@ knowledge2 = And(
 # B says "C is a knave."
 # C says "A is a knight."
 knowledge3 = And(
-    # TODO
+    Or(AKnight,AKnave),                     # A can be either a Knight or a Knave
+    Not(And(AKnight,AKnave)),               # But cannot be both at the same time
+
+    Or(BKnight,BKnave),                     # B can be either a Knight or a Knave
+    Not(And(BKnight,BKnave)),               # But cannot be both at the same time
+
+    Or(CKnight,CKnave),                     # C can be either a Knight or a Knave
+    Not(And(CKnight,CKnave)),               # But cannot be both at the same time
+
+    # A says either "I am a knight." or "I am a knave.", but you don't know which.
+    Implication(AKnight,Or(AKnight,AKnave)),         #If A is knight, it is either that A is a knight or A is a knave
+    Implication(AKnave,Not(Or(AKnight,AKnave))),     #If A is knave, it is not a knight or a knave (both are )
+
+    # B says "A said 'I am a knave'."
+    Implication(And(BKnight,BKnave),BKnave),
+    Implication(And(BKnight,BKnight),Not(BKnave)),
+
+    # B says "C is a knave."
+    Implication(BKnight,CKnave),                    #If B is a knight, C is a knave
+    Implication(BKnave,Not(CKnave)),                #If B is a knave, it is not true that C is a knave (therefore we know that C is a knight)
+
+    # C says "A is a knight."
+    Implication(CKnight,AKnight),                    #If C is a knight, A is a knight
+    Implication(CKnave,Not(AKnight)),                #If C is a knave, A it is not a knight (therefore A would be knave as well)
+
 )
 
 
